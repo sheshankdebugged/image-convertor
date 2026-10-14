@@ -1,0 +1,27 @@
+{
+  "name": "image-convertor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Client-side JavaScript PNG/JPG→WebP converter using browser File APIs and WASM codecs",
+  "source": "index.html",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html --dist-dir dist --public-url ./",
+    "serve": "npx --yes serve dist"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "@parcel/resolver-default": {
+    "packageExports": true
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.16.4",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "@jsquash/jpeg": "^1.6.0",
+    "@jsquash/png": "^3.1.1",
+    "@jsquash/webp": "^1.5.0",
+    "jszip": "^3.10.2"
+  }
+}
