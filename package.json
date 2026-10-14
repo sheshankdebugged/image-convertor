@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html --dist-dir dist --public-url ./",
-    "serve": "npx --yes serve dist",
+    "serve": "npx --yes serve dist"
   },
   "keywords": [
     "javascript",
