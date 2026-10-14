@@ -1,14 +1,52 @@
 {
   "name": "image-convertor",
   "version": "1.0.0",
-  "private": true,
-  "description": "Client-side JavaScript PNG/JPG→WebP converter using browser File APIs and WASM codecs",
-  "source": "index.html",
+  "description": "Browser JavaScript library: convert PNG/JPG to lossless WebP with WASM codecs (jSquash)",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "files": [
+    "src/index.js",
+    "src/convert.js",
+    "src/filename.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html --dist-dir dist --public-url ./",
-    "serve": "npx --yes serve dist"
+    "serve": "npx --yes serve dist",
   },
+  "keywords": [
+    "javascript",
+    "webp",
+    "image",
+    "png",
+    "jpeg",
+    "wasm",
+    "jsquash",
+    "squoosh",
+    "browser",
+    "codec",
+    "convert"
+  ],
+  "author": "sheshankdebugged",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sheshankdebugged/image-convertor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sheshankdebugged/image-convertor/issues"
+  },
+  "homepage": "https://sheshankdebugged.github.io/image-convertor/",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "@parcel/resolver-default": {
     "packageExports": true

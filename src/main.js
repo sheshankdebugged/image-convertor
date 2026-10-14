@@ -10,13 +10,90 @@ const app = document.querySelector('#app')
 
 app.innerHTML = `
   <header class="hero">
-    <h1 class="brand">image convertor</h1>
-    <p class="title">Drop PNG or JPG. Get clean WebP files.</p>
+    <p class="eyebrow">JavaScript library · npm</p>
+    <h1 class="brand">image-convertor</h1>
+    <p class="title">PNG/JPG → lossless WebP for browser JS apps</p>
     <p class="lede">
-      Convert batches of PNG and JPG images to lossless WebP right in your browser.
-      Files never leave your device.
+      A small JavaScript module for web developers: decode PNG/JPEG and encode
+      lossless WebP with WASM codecs from the jSquash / Squoosh ecosystem.
+      Use it in your own front-end pipelines — the page below is the docs and live demo.
+    </p>
+    <pre class="install" tabindex="0"><code>npm install image-convertor</code></pre>
+    <p class="hero-links">
+      <a href="https://github.com/sheshankdebugged/image-convertor">GitHub</a>
+      <a href="https://www.npmjs.com/package/image-convertor">npm</a>
+      <a href="#api">API</a>
+      <a href="#demo">Demo</a>
     </p>
   </header>
+
+  <section class="docs" aria-labelledby="why-heading">
+    <h2 id="why-heading">Why this exists for JS developers</h2>
+    <p>
+      Browser apps often need image transforms without a server. This package wraps
+      <code>@jsquash/png</code>, <code>@jsquash/jpeg</code>, and <code>@jsquash/webp</code>
+      into a tiny async API you can import into Vite, Parcel, webpack, or any ESM app.
+    </p>
+  </section>
+
+  <section class="docs" aria-labelledby="usage-heading">
+    <h2 id="usage-heading">Quick start</h2>
+    <pre class="code"><code>import {
+  convertImageToWebp,
+  processBatch,
+  sanitizeFilename,
+} from 'image-convertor'
+
+// Single File → lossless WebP Blob
+const { blob, outputName } = await convertImageToWebp(file)
+
+// Batch with concurrency + progress
+const results = await processBatch(files, {
+  concurrency: 2,
+  onProgress(done, total, result) {
+    console.log(done, total, result.ok)
+  },
+})</code></pre>
+  </section>
+
+  <section class="docs" id="api" aria-labelledby="api-heading">
+    <h2 id="api-heading">API</h2>
+    <dl class="api">
+      <div>
+        <dt><code>convertImageToWebp(file)</code></dt>
+        <dd>
+          Decode a PNG or JPEG <code>File</code>, encode lossless WebP.
+          Returns <code>{ blob, outputName, inputBytes, outputBytes }</code>.
+        </dd>
+      </div>
+      <div>
+        <dt><code>processBatch(files, options?)</code></dt>
+        <dd>
+          Convert many files with limited concurrency.
+          Options: <code>concurrency</code>, <code>onProgress(done, total, result, index)</code>.
+        </dd>
+      </div>
+      <div>
+        <dt><code>sanitizeFilename(name)</code></dt>
+        <dd>
+          Spaces → underscores, extension → <code>.webp</code>
+          (e.g. <code>photo summer.png</code> → <code>photo_summer.webp</code>).
+        </dd>
+      </div>
+      <div>
+        <dt><code>isConvertibleImage(file)</code> · <code>isJpegFile(file)</code></dt>
+        <dd>Helpers for MIME / extension checks before conversion.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="docs demo-intro" id="demo" aria-labelledby="demo-heading">
+    <h2 id="demo-heading">Live demo</h2>
+    <p>
+      Same library running in this page — drop PNG/JPG files to exercise
+      <code>processBatch</code> in the browser. Nothing is uploaded.
+    </p>
+  </section>
 
   <section
     class="dropzone"

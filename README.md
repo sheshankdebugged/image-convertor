@@ -1,54 +1,67 @@
-# image convertor
+# image-convertor
 
-Client-side **JavaScript** PNG/JPG → lossless WebP converter. Drop one or many images in the browser; each file is decoded and re-encoded with WASM codecs (`@jsquash/png`, `@jsquash/jpeg`, `@jsquash/webp`). Nothing is uploaded to a server.
+**JavaScript library** for converting PNG/JPG to **lossless WebP** in the browser using WASM codecs from the [jSquash](https://github.com/jamsinclair/jSquash) / Squoosh ecosystem.
 
-This project is a small demo of browser JavaScript image pipelines: the File API, drag-and-drop, async batching, and WebAssembly codecs from the Squoosh / jSquash ecosystem.
+Use it in front-end apps (Vite, Parcel, webpack, plain ESM). The GitHub Pages site is the package documentation and a live demo of the same API.
 
-## Features
+## Install
 
-- Batch convert PNG and JPG/JPEG via file picker or drag-and-drop
-- **Lossless** WebP output (`lossless: 1`) so decoded pixel data is preserved
-- Filename sanitization: spaces become underscores, extension becomes `.webp`
-  - Example: `240*240 autumn delas.png` → `240*240_autumn_delas.webp`
-  - Example: `photo summer sale.jpg` → `photo_summer_sale.webp`
-- Single-file download, or a ZIP (`image-convertor-batch.zip`) for multiple outputs
+```bash
+npm install image-convertor
+```
 
-## Run locally
+## Usage
+
+```js
+import {
+  convertImageToWebp,
+  processBatch,
+  sanitizeFilename,
+  isConvertibleImage,
+} from 'image-convertor'
+
+// One File → lossless WebP Blob
+const { blob, outputName, inputBytes, outputBytes } =
+  await convertImageToWebp(file)
+
+// Batch with concurrency
+const results = await processBatch(files, {
+  concurrency: 2,
+  onProgress(done, total, result, index) {
+    console.log(done, '/', total, result.ok)
+  },
+})
+```
+
+## API
+
+| Export | Description |
+|--------|-------------|
+| `convertImageToWebp(file)` | Decode PNG/JPEG `File`, encode lossless WebP → `{ blob, outputName, inputBytes, outputBytes }` |
+| `processBatch(files, options?)` | Convert many files; `concurrency`, `onProgress` |
+| `sanitizeFilename(name)` | Spaces → `_`, extension → `.webp` |
+| `isConvertibleImage(file)` | MIME / extension check |
+| `isJpegFile(file)` | JPEG detection helper |
+
+## Why JavaScript developers use this
+
+Browser pipelines often need image re-encoding without a backend. This package is a thin, documented JS module over `@jsquash/png`, `@jsquash/jpeg`, and `@jsquash/webp` so you can drop WASM codecs into an app without wiring each codec yourself.
+
+## Docs & demo
+
+- Site: https://sheshankdebugged.github.io/image-convertor/
+- Source: https://github.com/sheshankdebugged/image-convertor
+
+## Local docs site
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the URL Parcel prints (usually `http://localhost:1234`).
+## Publish notes
 
-## Deploy to GitHub Pages
-
-This repo uses **Parcel** (not Vite) and a GitHub Actions workflow that publishes `dist/` to GitHub Pages.
-
-1. Create a GitHub repo and push this project.
-2. In the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Push to `main` (or run the **Deploy to GitHub Pages** workflow manually).
-4. Site URL will look like: `https://<username>.github.io/<repo>/`
-
-The build uses `--public-url ./` so asset paths work under a project Pages subdirectory.
-
-Manual build (optional):
-
-```bash
-npm run build
-# output is in dist/
-```
-
-## How it works
-
-| Module | Role |
-|--------|------|
-| [`src/filename.js`](src/filename.js) | Pure JS rename rules (`sanitizeFilename`) |
-| [`src/convert.js`](src/convert.js) | PNG/JPEG decode → lossless WebP encode + batch concurrency |
-| [`src/main.js`](src/main.js) | UI: drop zone, queue, progress, ZIP download |
-
-All processing stays in the browser. No backend, accounts, or uploads.
+Library entry: [`src/index.js`](src/index.js). UI demo lives in [`src/main.js`](src/main.js) and is not part of the published package surface (`files` in `package.json`).
 
 ## License
 
