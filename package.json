@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Browser JavaScript library: convert PNG/JPG to lossless WebP with WASM codecs (jSquash)",
   "type": "module",
+  "source": "index.html",
   "main": "./src/index.js",
-  "module": "./src/index.js",
   "exports": {
     ".": {
       "import": "./src/index.js",
@@ -19,9 +19,16 @@
     "LICENSE"
   ],
   "sideEffects": false,
+  "targets": {
+    "main": false,
+    "default": {
+      "distDir": "dist",
+      "publicUrl": "./"
+    }
+  },
   "scripts": {
     "dev": "parcel index.html",
-    "build": "parcel build index.html --dist-dir dist --public-url ./",
+    "build": "parcel build index.html",
     "serve": "npx --yes serve dist"
   },
   "keywords": [
